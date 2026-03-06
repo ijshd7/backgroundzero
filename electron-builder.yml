@@ -1,0 +1,19 @@
+appId: com.backgroundzero.app
+productName: BackgroundZero
+directories:
+  buildResources: resources
+  output: dist
+files:
+  - out/**/*
+win:
+  target:
+    - nsis
+  icon: resources/icon.png
+mac:
+  target:
+    - dmg
+  icon: resources/icon.png
+linux:
+  target:
+    - AppImage
+  icon: resources/icon.png
