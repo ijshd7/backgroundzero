@@ -22,7 +22,7 @@ Built with Electron, React, TypeScript, and Tailwind CSS. Uses the [remove.bg](h
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/backgroundzero.git
+git clone https://github.com/ijshd7/backgroundzero.git
 cd backgroundzero
 
 # Use the correct Node version
