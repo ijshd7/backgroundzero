@@ -4,6 +4,8 @@ A desktop app for removing image backgrounds. Drop in an image, preview the resu
 
 Built with Electron, React, TypeScript, and Tailwind CSS. Uses the [remove.bg](https://www.remove.bg/) API for background removal.
 
+![BackgroundZero demo](demo.png)
+
 ## Features
 
 - **Drag-and-drop or file picker** — supports PNG, JPG, and WebP (up to 12MB)
