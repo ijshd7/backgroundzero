@@ -1,20 +1,178 @@
 @import "tailwindcss";
 
+/* ── Fonts ── */
+
+@font-face {
+  font-family: 'Orbitron';
+  src: url('./assets/fonts/Orbitron.woff2') format('woff2');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/fonts/Inter.woff2') format('woff2');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tailwind v4 Theme Tokens ── */
+
+@theme {
+  --color-sw-bg-deep: #0a0a0f;
+  --color-sw-bg-base: #0d0d1a;
+  --color-sw-bg-surface: #141428;
+  --color-sw-bg-elevated: #1a1a35;
+  --color-sw-pink: #ff2d95;
+  --color-sw-pink-dim: #cc2477;
+  --color-sw-cyan: #00f0ff;
+  --color-sw-cyan-dim: #00c0cc;
+  --color-sw-purple: #b030ff;
+  --color-sw-yellow: #ffe156;
+  --color-sw-red: #ff3860;
+  --color-sw-text: #e8e6f0;
+  --color-sw-text-muted: #7a7890;
+  --color-sw-text-dim: #4a4860;
+  --color-sw-border: #2a2850;
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ── Glow Variables ── */
+
+:root {
+  --glow-pink: 0 0 10px rgba(255, 45, 149, 0.5), 0 0 30px rgba(255, 45, 149, 0.2);
+  --glow-pink-intense: 0 0 15px rgba(255, 45, 149, 0.7), 0 0 40px rgba(255, 45, 149, 0.3), 0 0 80px rgba(255, 45, 149, 0.1);
+  --glow-cyan: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 30px rgba(0, 240, 255, 0.2);
+  --glow-cyan-intense: 0 0 15px rgba(0, 240, 255, 0.7), 0 0 40px rgba(0, 240, 255, 0.3), 0 0 80px rgba(0, 240, 255, 0.1);
+  --glow-text-pink: 0 0 10px rgba(255, 45, 149, 0.8), 0 0 30px rgba(255, 45, 149, 0.4);
+  --glow-text-cyan: 0 0 10px rgba(0, 240, 255, 0.6), 0 0 30px rgba(0, 240, 255, 0.3);
+}
+
+/* ── Base Styles ── */
+
 body {
   margin: 0;
-  background-color: #0f0f0f;
-  color: #e0e0e0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #0a0a0f;
+  color: #e8e6f0;
+  font-family: 'Inter', sans-serif;
   overflow: hidden;
   user-select: none;
 }
 
+/* ── Checkerboard (transparency preview) ── */
+
 .checkerboard {
   background-image:
-    linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
-    linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
-    linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+    linear-gradient(45deg, #1a1a35 25%, transparent 25%),
+    linear-gradient(-45deg, #1a1a35 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1a1a35 75%),
+    linear-gradient(-45deg, transparent 75%, #1a1a35 75%);
   background-size: 16px 16px;
   background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+/* ── Synthwave Animated Background ── */
+
+.synthwave-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Horizon glow */
+.synthwave-bg::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(255, 45, 149, 0.15) 0%,
+    rgba(176, 48, 255, 0.08) 30%,
+    transparent 70%
+  );
+}
+
+/* Perspective grid */
+.synthwave-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  height: 50%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 240, 255, 0.07) 0px,
+      rgba(0, 240, 255, 0.07) 1px,
+      transparent 1px,
+      transparent 60px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 240, 255, 0.07) 0px,
+      rgba(0, 240, 255, 0.07) 1px,
+      transparent 1px,
+      transparent 60px
+    );
+  transform: perspective(400px) rotateX(60deg);
+  transform-origin: 50% 100%;
+  animation: grid-scroll 15s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes grid-scroll {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 0 0, 0 60px;
+  }
+}
+
+/* ── CRT Scan Lines ── */
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.03) 0px,
+    rgba(0, 0, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* ── Animations ── */
+
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.neon-pulse {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+/* ── Reduced Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .synthwave-bg::after {
+    animation: none;
+  }
+  .neon-pulse {
+    animation: none;
+  }
 }

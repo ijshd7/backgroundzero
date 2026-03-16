@@ -43,19 +43,32 @@ export default function DropZone({ onFile }: DropZoneProps) {
       onClick={handleClick}
       className={`
         flex flex-col items-center justify-center gap-4 p-12 mx-8 my-6
-        rounded-2xl border-2 border-dashed cursor-pointer transition-all duration-200
+        rounded-2xl border-2 border-dashed cursor-pointer transition-all duration-300
         ${isDragging
-          ? 'border-[#6c63ff] bg-[#6c63ff]/10 scale-[1.02]'
-          : 'border-[#3a3a5c] bg-[#1a1a2e] hover:border-[#6c63ff]/60 hover:bg-[#1a1a2e]/80'
+          ? 'border-sw-cyan bg-sw-cyan/5 scale-[1.02]'
+          : 'border-sw-border bg-sw-bg-surface hover:border-sw-pink/50'
         }
       `}
+      style={{
+        boxShadow: isDragging
+          ? '0 0 15px rgba(0, 240, 255, 0.7), 0 0 40px rgba(0, 240, 255, 0.3), 0 0 80px rgba(0, 240, 255, 0.1)'
+          : 'none',
+        transition: 'box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease'
+      }}
+      onMouseEnter={e => {
+        if (!isDragging) e.currentTarget.style.boxShadow = 'var(--glow-pink)'
+      }}
+      onMouseLeave={e => {
+        if (!isDragging) e.currentTarget.style.boxShadow = 'none'
+      }}
     >
       <svg
-        className="w-16 h-16 text-[#6c63ff]/70"
+        className="w-16 h-16 text-sw-cyan/60"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
         strokeWidth={1.5}
+        style={{ filter: isDragging ? 'drop-shadow(0 0 8px rgba(0, 240, 255, 0.6))' : 'none' }}
       >
         <path
           strokeLinecap="round"
@@ -64,10 +77,10 @@ export default function DropZone({ onFile }: DropZoneProps) {
         />
       </svg>
       <div className="text-center">
-        <p className="text-lg font-medium text-[#e0e0e0]">
+        <p className="text-lg font-bold font-display text-sw-text tracking-wide">
           Drop your image here
         </p>
-        <p className="text-sm text-[#808080] mt-1">
+        <p className="text-sm text-sw-text-muted mt-1">
           or click to browse — PNG, JPG, WebP (max 12MB)
         </p>
       </div>
