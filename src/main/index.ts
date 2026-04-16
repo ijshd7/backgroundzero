@@ -2,9 +2,15 @@ import { app, BrowserWindow, ipcMain, dialog, session } from 'electron'
 import { join } from 'path'
 import { writeFile } from 'fs/promises'
 import Store from 'electron-store'
-import { removeBackground } from './removeBg'
+import { getProvider, providerList, DEFAULT_PROVIDER } from './providers'
+import type { ProviderId } from './providers'
 
-const store = new Store<{ apiKey?: string }>({
+type StoreSchema = {
+  apiKey?: string
+  provider?: ProviderId
+}
+
+const store = new Store<StoreSchema>({
   encryptionKey: 'backgroundzero-v1'
 })
 
@@ -33,11 +39,10 @@ function createWindow(): void {
 
 function registerIpcHandlers(): void {
   ipcMain.handle('remove-background', async (_event, imageBase64: string) => {
-    const apiKey = store.get('apiKey')
-    if (!apiKey) {
-      return { success: false, error: 'No API key configured. Please set your remove.bg API key in Settings.' }
-    }
-    return removeBackground(imageBase64, apiKey)
+    const providerId = store.get('provider') ?? DEFAULT_PROVIDER
+    const provider = getProvider(providerId)
+    const apiKey = provider.requiresApiKey ? store.get('apiKey') ?? null : null
+    return provider.remove(imageBase64, apiKey)
   })
 
   ipcMain.handle('save-image', async (_event, imageBase64: string, defaultFilename: string) => {
@@ -65,6 +70,18 @@ function registerIpcHandlers(): void {
 
   ipcMain.handle('set-api-key', (_event, key: string) => {
     store.set('apiKey', key)
+  })
+
+  ipcMain.handle('get-provider', () => {
+    return store.get('provider') ?? DEFAULT_PROVIDER
+  })
+
+  ipcMain.handle('set-provider', (_event, id: ProviderId) => {
+    store.set('provider', id)
+  })
+
+  ipcMain.handle('list-providers', () => {
+    return providerList
   })
 }
 

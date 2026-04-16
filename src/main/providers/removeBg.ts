@@ -1,10 +1,11 @@
 import { net } from 'electron'
+import type { BackgroundRemovalProvider, ProviderResult } from './types'
 
-export type RemoveBgResult =
-  | { success: true; data: string; creditsRemaining: string | null }
-  | { success: false; error: string }
+async function remove(imageBase64: string, apiKey?: string | null): Promise<ProviderResult> {
+  if (!apiKey) {
+    return { success: false, error: 'No API key configured. Please set your remove.bg API key in Settings.' }
+  }
 
-export async function removeBackground(imageBase64: string, apiKey: string): Promise<RemoveBgResult> {
   const imageBuffer = Buffer.from(imageBase64, 'base64')
 
   const boundary = '----BackgroundZeroBoundary' + Date.now()
@@ -65,4 +66,11 @@ export async function removeBackground(imageBase64: string, apiKey: string): Pro
   } catch (err) {
     return { success: false, error: `Network error: ${err instanceof Error ? err.message : 'Unknown error'}` }
   }
+}
+
+export const removeBgProvider: BackgroundRemovalProvider = {
+  id: 'removebg',
+  label: 'remove.bg (API)',
+  requiresApiKey: true,
+  remove
 }

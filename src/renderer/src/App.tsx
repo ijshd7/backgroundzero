@@ -22,9 +22,12 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   useEffect(() => {
-    api.getApiKey().then((key: string | null) => {
-      if (!key) setSettingsOpen(true)
-    })
+    Promise.all([api.getProvider(), api.listProviders(), api.getApiKey()]).then(
+      ([providerId, providers, key]) => {
+        const active = providers.find(p => p.id === providerId)
+        if (active?.requiresApiKey && !key) setSettingsOpen(true)
+      }
+    )
   }, [])
 
   return (
